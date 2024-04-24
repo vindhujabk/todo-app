@@ -5,12 +5,9 @@ import TokenContext from "../../context/TokenContext";
 import axios from "../../Axios/axios.js";
 import AddTodo from "../createTask/AddTodos.js"
 import TodosList from '../createTask/TodosList';
-//import { TodosProvider } from "../../context/TodosContext.js";
-import { useTodos } from "../../context/TodosContext.js";
 
 
 function CreateTask() {
-  const {todos} = useContext(useTodos)
   const { dispatch } = useContext(TaskContext);
   const { userToken } = useContext(TokenContext);
   const [title, setTitle] = useState("");
@@ -21,7 +18,7 @@ function CreateTask() {
     try {
       const res = await axios.post(
         "/project/addProject",
-        { title, description,todos },
+        { title, description },
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -35,8 +32,7 @@ function CreateTask() {
     dispatch({
       type: "ADD_TASK",
       title,
-      description,
-      todos
+      description
     });
     setTitle("");
     setDescription("");
