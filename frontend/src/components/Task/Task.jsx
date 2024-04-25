@@ -9,44 +9,29 @@ import axios from "../../Axios/axios.js"
 import UploadIcon from "@mui/icons-material/Upload";
 import Tooltip from "@mui/material/Tooltip";
 import { Octokit } from '@octokit/core';
-import dotenv from "dotenv"
-
-
 
 
 function Task({ task, id }) {
   const { dispatch } = useContext(TaskContext);
   const { userToken } = useContext(TokenContext);
-  const TOKEN = process.env.REACT_APP_GITHUB_TOKEN
-  console.log(TOKEN)
 
   const octokit = new Octokit({
-    auth: 'TOKEN'
+    auth: process.env.REACT_APP_GITHUB_TOKEN
   });
 
-  const uploadGist = async (e) => {
-    e.preventDefault();
+  async function createGist(projectTitle, projectDescription) {
     try {
-      await createGist();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  async function createGist() {
-    try {
-      // Make a POST request to create a Gist
+      
       const response = await octokit.request('POST /gists', {
-        description: 'Example of a gist', // Description of the Gist
-        public: false, // Set to true if you want the Gist to be public
+        description: projectTitle, 
+        public: false, 
         files: {
-          'README.md': {
-            content: 'Hello World' // Content of the Gist file
+          [`${projectTitle}.md`]: {
+              content: `# ${projectTitle}\n\n${projectDescription}` // Content of the Gist file
           }
         }
       });
-  
-      
+   
       console.log('Gist created:', response.data.html_url);
     } catch (error) {
      
@@ -54,6 +39,16 @@ function Task({ task, id }) {
     }
   }
 
+  const uploadGist = async (e) => {
+    e.preventDefault();
+    try {
+        const projectTitle = task.title;
+        const projectDescription = task.description
+        await createGist(projectTitle, projectDescription);
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 
 

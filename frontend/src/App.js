@@ -6,8 +6,6 @@ import Completed from './components/Completed';
 import AllTask from './components/AllTask';
 import Layout from './components/Layout';
 import TaskContext from './context/TaskContext';
-import TodosList from './components/createTask/TodosList.js';
-import AddTodo from './components/createTask/AddTodos.js';
 import { TodosProvider } from './context/TodosContext.js';
 import TokenContext from './context/TokenContext';
 import taskReducer from './reducer/taskReducer';
