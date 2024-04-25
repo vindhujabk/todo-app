@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import moment from "moment";
 import "./task.css";
 import { useContext } from "react";
@@ -9,17 +10,20 @@ import axios from "../../Axios/axios.js"
 import UploadIcon from "@mui/icons-material/Upload";
 import Tooltip from "@mui/material/Tooltip";
 import { Octokit } from '@octokit/core';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 
 function Task({ task, id }) {
   const { dispatch } = useContext(TaskContext);
   const { userToken } = useContext(TokenContext);
+  const navigate = useNavigate();
+
 
   const octokit = new Octokit({
     auth: process.env.REACT_APP_GITHUB_TOKEN
   });
 
-  async function createGist(projectTitle, projectDescription) {
+  async function createGist(projectTitle, projectDescription,todosList) {
     try {
       
       const response = await octokit.request('POST /gists', {
@@ -27,7 +31,7 @@ function Task({ task, id }) {
         public: false, 
         files: {
           [`${projectTitle}.md`]: {
-              content: `# ${projectTitle}\n\n${projectDescription}` // Content of the Gist file
+              content: `# ${projectTitle}\n\n${projectDescription}\n\n ${todosList}` // Content of the Gist file
           }
         }
       });
@@ -36,7 +40,7 @@ function Task({ task, id }) {
 
       return {
         url: response.data.html_url,
-            content: `# ${projectTitle}\n\n${projectDescription}`
+            content: `# ${projectTitle}\n\n${projectDescription}\n\n ${todosList}`
       }
     } catch (error) {
      
@@ -66,8 +70,9 @@ function Task({ task, id }) {
     e.preventDefault();
     try {
         const projectTitle = task.title;
-        const projectDescription = task.description
-        const gist = await createGist(projectTitle, projectDescription);
+        const projectDescription = task.description;
+        const todosList = task.todos;
+        const gist = await createGist(projectTitle, projectDescription,todosList);
 
         saveGistLocally(projectTitle, gist.content);
     } catch (error) {
@@ -103,7 +108,10 @@ function Task({ task, id }) {
       console.log("Error occurred while marking task as done:", error);
     }
   };
-
+const handleView = (id) =>{
+  
+  navigate(`/project/${id}`);
+}
 
   return (
     <div className="bg-slate-300 py-4 rounded-lg shadow-md flex items-center justify-center gap-2 mb-3">
@@ -111,7 +119,7 @@ function Task({ task, id }) {
         <input
           type="checkbox"
           className="checkbox"
-          // onClick={handleMarkDone}
+          
           onChange={() => handleMarkDone(task.id)}
            checked={task.completed}
         />
@@ -119,7 +127,11 @@ function Task({ task, id }) {
       <div className="task-info text-slate-900 text-sm w-10/12">
         <h4 className="task-title text-lg capitalize">{task.title}</h4>
         <p className="task-description">{task.description}</p>
-        
+        {/* <ul>
+    {task.todos.map((todo, index) => (
+      <li key={index}>{todo}</li>
+    ))}
+  </ul> */}
         <div className=" italic opacity-60">
           {task?.createdAt ? (
             <p>{moment(task.createdAt).fromNow()}</p>
@@ -132,7 +144,7 @@ function Task({ task, id }) {
 
       <Tooltip title="Export as Gist">
       <UploadIcon
-          style={{ fontSize: 30, cursor: "pointer" }}
+          style={{ fontSize: 24, cursor: "pointer" }}
           size="large"
           onClick={uploadGist}
           className="upload-task-btn bg-blue-700 rounded-full border-2 shadow-2xl border-white p-1 m-1"
@@ -140,10 +152,17 @@ function Task({ task, id }) {
     </Tooltip>
       
         <DeleteIcon
-          style={{ fontSize: 30, cursor: "pointer" }}
+          style={{ fontSize: 24, cursor: "pointer" }}
           size="large"
           onClick={handleRemove}
           className="remove-task-btn bg-blue-700 rounded-full border-2 shadow-2xl border-white p-1 m-1"
+        />
+        
+        <VisibilityIcon
+        style={{ fontSize: 24, cursor: "pointer" }}
+        size="large"
+        onClick={()=>handleView(id)}
+        className="remove-task-btn bg-blue-700 rounded-full border-2 shadow-2xl border-white p-1 m-1"
         />
       </div>
     </div>

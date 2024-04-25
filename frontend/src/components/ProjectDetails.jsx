@@ -1,23 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useContext } from "react";
-import TaskContext from "../../context/TaskContext";
-import TokenContext from "../../context/TokenContext";
-import axios from "../../Axios/axios.js";
+import TaskContext from "../context/TaskContext";
+import TokenContext from "../context/TokenContext.js";
+import axios from "../Axios/axios.js";
+import { useNavigate } from "react-router-dom";
 
-
-function CreateTask() {
+function UpdateTask({ projectId }) {
   const { dispatch } = useContext(TaskContext);
   const { userToken } = useContext(TokenContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [todos, setTodos] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchProjectDetails();
+  });
+
+  const fetchProjectDetails = async () => {
+    try {
+      const response = await axios.get(`/project/getProject/${projectId}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      const project = response.data.project;
+      setTitle(project.title);
+      setDescription(project.description);
+      setTodos(project.todos);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleAdd = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "/project/addProject",
-        { title, description, todos: todos.map(todo => ({ text: todo }))  },
+      const res = await axios.put(
+        `/project/updateProject/${projectId}`,
+        { title, description, todos },
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -25,22 +46,20 @@ function CreateTask() {
         }
       );
       console.log(res);
-     
+      
       dispatch({
-        type: "ADD_TASK",
+        type: "UPDATE_TASK",
+        id: projectId,
         title,
         description,
-        todos
+        todos,
       });
       
-      setTitle("");
-      setDescription("");
-      setTodos([]);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
   };
-
 
   const handleTodoChange = (index, value) => {
     const updatedTodos = [...todos];
@@ -106,9 +125,9 @@ function CreateTask() {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="bg-blue-700 rounded-md text-white px-5 py-1 mt-5"
+              className=" bg-blue-700 rounded-md text-white px-5 py-1 mt-5"
             >
-              Add Project
+              Update
             </button>
           </div>
         </form>
@@ -117,4 +136,4 @@ function CreateTask() {
   );
 }
 
-export default CreateTask;
+export default UpdateTask;

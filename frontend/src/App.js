@@ -5,8 +5,8 @@ import Active from './components/Active';
 import Completed from './components/Completed';
 import AllTask from './components/AllTask';
 import Layout from './components/Layout';
+import ProjectDetails from './components/ProjectDetails.jsx';
 import TaskContext from './context/TaskContext';
-import { TodosProvider } from './context/TodosContext.js';
 import TokenContext from './context/TokenContext';
 import taskReducer from './reducer/taskReducer';
 import tokenReducer from './reducer/tokenReducer';
@@ -15,6 +15,8 @@ import Header from './components/Header/Header';
 import Login from './components/Login';
 import Register from './components/Register';
 import axios from './Axios/axios.js';
+
+
 function App() {
   const token = JSON.parse(localStorage.getItem("authToken"));
   const [tasks, dispatch] = useReducer(taskReducer, [])
@@ -30,7 +32,7 @@ function App() {
             Authorization: `Bearer ${userToken}`
           }
         })
-        //tokenDispatch({type: "SET_TOKEN", payload: res.token})
+        
         console.log("res.data: ", res.data);
         userDispatch({type: "SET_USER", payload:res.data.user})
       } catch (error) {
@@ -63,7 +65,7 @@ function App() {
     <BrowserRouter>
       <TokenContext.Provider value={{userToken, tokenDispatch, user, userDispatch}}>
         <TaskContext.Provider value={{ tasks, dispatch }}>
-          <TodosProvider>
+          
           <Routes>
             <Route path="/" element={<Header />}>
               <Route path='/' element={token ? <Layout /> : <Login />}>
@@ -71,12 +73,13 @@ function App() {
                 <Route path="active" element={<Active />} />
                 <Route path="completed" element={<Completed />} />
               </Route>
+              <Route path="/project" element={<ProjectDetails />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               
             </Route>
           </Routes>
-          </TodosProvider>
+         
         </TaskContext.Provider>
       </TokenContext.Provider>
 
