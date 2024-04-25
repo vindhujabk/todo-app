@@ -33,25 +33,47 @@ function Task({ task, id }) {
       });
    
       console.log('Gist created:', response.data.html_url);
+
+      return {
+        url: response.data.html_url,
+            content: `# ${projectTitle}\n\n${projectDescription}`
+      }
     } catch (error) {
      
       console.error('Error creating Gist:', error);
+      throw error
     }
   }
+
+  function saveGistLocally(projectTitle, content) {
+    const blob = new Blob([content], { type: 'text/markdown' });
+    const fileName = `${projectTitle}.md`;
+
+    if (window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, fileName);
+    } else {
+        const downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(blob);
+        downloadLink.download = fileName;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+}
+
 
   const uploadGist = async (e) => {
     e.preventDefault();
     try {
         const projectTitle = task.title;
         const projectDescription = task.description
-        await createGist(projectTitle, projectDescription);
+        const gist = await createGist(projectTitle, projectDescription);
+
+        saveGistLocally(projectTitle, gist.content);
     } catch (error) {
         console.log(error);
     }
 };
-
-
-
 
 
   const handleRemove = async (e) => {
