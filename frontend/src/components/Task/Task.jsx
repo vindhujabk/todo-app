@@ -26,23 +26,31 @@ function Task({ task, id }) {
   async function createGist(projectTitle, projectDescription, todosList) {
     try {
 
-      const todosText = todosList.map(todo => `- ${todo.text}`).join('\n');
-  
+      const completedTodos = todosList.filter(todo => todo.completed);
+      const totalTodos = todosList.length;
+      const pendingTodos = todosList.filter(todo => !todo.completed);
+      
+      
+      const completedTodosText = completedTodos.map(todo => `- ${todo.text}`).join('\n');
+      const pendingTodosText = pendingTodos.map(todo => `- ${todo.text}`).join('\n');
       const response = await octokit.request('POST /gists', {
         description: projectTitle,
         public: false,
         files: {
           [`${projectTitle}.md`]: {
-            content: `# ${projectTitle}\n\n${projectDescription}\n\n## Todos\n${todosText}`
+            content: `# ${projectTitle}\n\n* Description: ${projectDescription}\n\n## Summary\n- ${completedTodos.length} / ${totalTodos} completed.\n\n## Pending \n${pendingTodosText}\n\n## Completed \n${completedTodosText}`
           }
-        }
+        },
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
       });
   
       console.log('Gist created:', response.data.html_url);
   
       return {
         url: response.data.html_url,
-        content: `# ${projectTitle}\n\n${projectDescription}\n\n## Todos\n${todosText}`
+        content: `# ${projectTitle}\n\n* Description: ${projectDescription}\n\n## Summary\n- ${completedTodos.length} / ${totalTodos} completed.\n\n## Pending \n${pendingTodosText}\n\n## Completed \n${completedTodosText}`
       };
     } catch (error) {
       console.error('Error creating Gist:', error);
@@ -159,13 +167,13 @@ function Task({ task, id }) {
           onClick={handleRemove}
           className="remove-task-btn bg-blue-700 rounded-full border-2 shadow-2xl border-white p-1 m-1"
         />
-        
+        <Tooltip title="View project details">
         <VisibilityIcon
         style={{ fontSize: 24, cursor: "pointer" }}
         size="sm"
         onClick={()=>handleView(id)}
         className="remove-task-btn bg-blue-700 rounded-full border-2 shadow-2xl border-white p-1 m-1"
-        />
+        /></Tooltip>
       </div>
     </div>
   );

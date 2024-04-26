@@ -18,7 +18,8 @@ function UpdateTask() {
     if (id) {
       fetchProjectDetails();
     }
-  }, [id]);
+  },// eslint-disable-next-line
+   [id]);
 
   const fetchProjectDetails = async () => {
     try {
@@ -54,7 +55,7 @@ function UpdateTask() {
           },
         }
       );
-
+      console.log(res);
       dispatch({
         type: "UPDATE_TASK",
         id: id,
@@ -81,9 +82,9 @@ function UpdateTask() {
     setTodos(updatedTodos);
   };
 
-  const handleAddTodo = () => {
-    setTodos([...todos, { text: "", completed: false }]);
-  };
+  // const handleAddTodo = () => {
+  //   setTodos([...todos, { text: "", completed: false }]);
+  // };
 
   const sortedTodos = [...todos].sort((a, b) => {
     if (a.completed === b.completed) {
@@ -143,13 +144,13 @@ function UpdateTask() {
                 />
               </div>
             ))}
-            <button
+            {/* <button
               type="button"
               onClick={handleAddTodo}
               className="text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               Add Todo
-            </button>
+            </button> */}
           </div>
 
           <div className="flex justify-center">
