@@ -15,8 +15,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import axios from './Axios/axios.js';
 import UpdateTask from './components/ProjectDetails.jsx';
-import { inject } from '@vercel/analytics';
-inject();
+
 
 function App() {
   const token = JSON.parse(localStorage.getItem("authToken"));

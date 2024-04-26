@@ -25,7 +25,7 @@ function CreateTask() {
         }
       );
       console.log(res);
-     
+      window.location.reload();
       dispatch({
         type: "ADD_TASK",
         title,

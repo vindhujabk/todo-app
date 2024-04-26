@@ -16,6 +16,7 @@ function Task({ task, id }) {
   const { dispatch } = useContext(TaskContext);
   const { userToken } = useContext(TokenContext);
   const navigate = useNavigate();
+  // const {tasks} = useContext(TaskContext)
 
   const octokit = new Octokit({
     auth: process.env.REACT_APP_GITHUB_TOKEN,
@@ -104,6 +105,7 @@ function Task({ task, id }) {
         type: "REMOVE_TASK",
         id,
       });
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
