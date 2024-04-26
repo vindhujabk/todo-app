@@ -25,6 +25,7 @@ function Task({ task, id }) {
 
   async function createGist(projectTitle, projectDescription, todosList) {
     try {
+
       const todosText = todosList.map(todo => `- ${todo.text}`).join('\n');
   
       const response = await octokit.request('POST /gists', {
