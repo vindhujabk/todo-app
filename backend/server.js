@@ -14,7 +14,13 @@ mongoose.set('strictQuery', true);
 
 //middlewares
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: ["https://todo-app-uz7f-lvsstsj1v-vindhujas-projects.vercel.app"],
+    methods: ["POST", "GET", "DELETE", "PUT"],
+    credentials: true,
+    allowedHeaders: ["Content-Type"],
+  }));
+  
 
 //db config
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
