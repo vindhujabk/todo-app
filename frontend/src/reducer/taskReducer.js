@@ -19,16 +19,18 @@ function taskReducer(tasks, action) {
             return tasks.filter(task => task.id !== action.id);
         }
         case "MARK_DONE": {
-            return tasks.map((task, index) => {
+            return tasks.map(task => {
                 if (task.id === action.id) {
+                    console.log(typeof(task.id),typeof(action.id))
                     return {
                         ...task,
                         completed: !task.completed
-                    }
+                    };
                 }
-                return task
-            })
+                return task;
+            });
         }
+        
         case "UPDATE_TASK": {
             return tasks.map(task => {
               if (task.id === action.id) {

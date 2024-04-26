@@ -7,7 +7,7 @@ function TaskIndicator() {
             <nav>
                 <ul className='flex gap-3 justify-between p-3 bg-slate-400 rounded-lg shadow-2xl'>
                     <li>
-                        <NavLink to="/">All Task</NavLink>
+                        <NavLink to="/">All Projects</NavLink>
                     </li>
                     <li>
                         <NavLink to="/active">Active</NavLink>

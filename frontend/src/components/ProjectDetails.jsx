@@ -14,12 +14,14 @@ function UpdateTask() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  useEffect(() => {
-    if (id) {
-      fetchProjectDetails();
-    }
-  },// eslint-disable-next-line
-   [id]);
+  useEffect(
+    () => {
+      if (id) {
+        fetchProjectDetails();
+      }
+    }, // eslint-disable-next-line
+    [id]
+  );
 
   const fetchProjectDetails = async () => {
     try {
