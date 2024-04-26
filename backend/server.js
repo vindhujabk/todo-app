@@ -31,5 +31,9 @@ mongoose.connection.on('error', (error) => {
 app.use("/api/user", userRouter)
 app.use("/api/project", projectRouter)
 
+app.get("/", (req, res) => {
+    res.json({ message: "Todo App is running" });
+  });
+
 //listen
 app.listen(port, () => console.log(`Listening on localhost:${port}`))
