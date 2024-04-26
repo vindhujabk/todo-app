@@ -16,7 +16,7 @@ mongoose.set('strictQuery', true);
 app.use(express.json())
 app.use(cors(
 	{
-		origin: ["https://todo-app-nine-beige-94.vercel.app/"],
+		origin: ["https://todo-app-uz7f.vercel.app/"],
 		methods: ["POST", "GET", "DELETE", "PUT"],
 		credentials: true
 	}
