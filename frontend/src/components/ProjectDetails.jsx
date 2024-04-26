@@ -3,41 +3,49 @@ import { useContext } from "react";
 import TaskContext from "../context/TaskContext";
 import TokenContext from "../context/TokenContext.js";
 import axios from "../Axios/axios.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams} from "react-router-dom";
 
-function UpdateTask({ projectId }) {
+
+function UpdateTask() {
   const { dispatch } = useContext(TaskContext);
   const { userToken } = useContext(TokenContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [todos, setTodos] = useState([]);
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  useEffect(() => {
+useEffect(() => {
+  if (id) {
     fetchProjectDetails();
-  });
+  }
+},// eslint-disable-next-line
+ [id]);  
 
   const fetchProjectDetails = async () => {
     try {
-      const response = await axios.get(`/project/getProject/${projectId}`, {
+      const response = await axios.get(`/project/getProject/${id}`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       });
-      const project = response.data.project;
-      setTitle(project.title);
-      setDescription(project.description);
-      setTodos(project.todos);
+      const project = response.data;
+      console.log(project)
+      if (project) {
+        setTitle(project.title);
+        setDescription(project.description);
+        setTodos(project.todos.map(todo => todo.text));
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleAdd = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(
-        `/project/updateProject/${projectId}`,
+      const res = await axios.post(
+        `/project/updateProject/${id}`,
         { title, description, todos },
         {
           headers: {
@@ -49,13 +57,13 @@ function UpdateTask({ projectId }) {
       
       dispatch({
         type: "UPDATE_TASK",
-        id: projectId,
+        id: id,
         title,
         description,
         todos,
       });
       
-      navigate("/");
+      navigate("/"); 
     } catch (error) {
       console.log(error);
     }
@@ -74,7 +82,7 @@ function UpdateTask({ projectId }) {
   return (
     <div className="addContainer md:w-2/3 md:mx-auto mx-3 mt-3 flex justify-center">
       <div className="grow">
-        <form onSubmit={handleAdd}>
+        <form onSubmit={handleUpdate}>
           <div>
             <label htmlFor="title">Title</label>
             <input

@@ -5,7 +5,6 @@ import Active from './components/Active';
 import Completed from './components/Completed';
 import AllTask from './components/AllTask';
 import Layout from './components/Layout';
-import ProjectDetails from './components/ProjectDetails.jsx';
 import TaskContext from './context/TaskContext';
 import TokenContext from './context/TokenContext';
 import taskReducer from './reducer/taskReducer';
@@ -15,6 +14,7 @@ import Header from './components/Header/Header';
 import Login from './components/Login';
 import Register from './components/Register';
 import axios from './Axios/axios.js';
+import UpdateTask from './components/ProjectDetails.jsx';
 
 
 function App() {
@@ -73,7 +73,7 @@ function App() {
                 <Route path="active" element={<Active />} />
                 <Route path="completed" element={<Completed />} />
               </Route>
-              <Route path="/project" element={<ProjectDetails />} />
+              <Route path="/project/:id" element={<UpdateTask />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               

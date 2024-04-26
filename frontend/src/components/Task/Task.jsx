@@ -108,10 +108,10 @@ function Task({ task, id }) {
       console.log("Error occurred while marking task as done:", error);
     }
   };
-const handleView = (id) =>{
-  
-  navigate(`/project/${id}`);
+  const handleView = (id) => {
+    navigate(`/project/${id}`);
 }
+  
 
   return (
     <div className="bg-slate-300 py-4 rounded-lg shadow-md flex items-center justify-center gap-2 mb-3">
@@ -145,7 +145,7 @@ const handleView = (id) =>{
       <Tooltip title="Export as Gist">
       <UploadIcon
           style={{ fontSize: 24, cursor: "pointer" }}
-          size="large"
+          size="sm"
           onClick={uploadGist}
           className="upload-task-btn bg-blue-700 rounded-full border-2 shadow-2xl border-white p-1 m-1"
         />
@@ -153,14 +153,14 @@ const handleView = (id) =>{
       
         <DeleteIcon
           style={{ fontSize: 24, cursor: "pointer" }}
-          size="large"
+          size="sm"
           onClick={handleRemove}
           className="remove-task-btn bg-blue-700 rounded-full border-2 shadow-2xl border-white p-1 m-1"
         />
         
         <VisibilityIcon
         style={{ fontSize: 24, cursor: "pointer" }}
-        size="large"
+        size="sm"
         onClick={()=>handleView(id)}
         className="remove-task-btn bg-blue-700 rounded-full border-2 shadow-2xl border-white p-1 m-1"
         />
