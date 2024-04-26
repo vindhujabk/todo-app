@@ -14,7 +14,6 @@ mongoose.set('strictQuery', true);
 
 //middlewares
 app.use(express.json())
-app.use(cors())
 app.use(cors(
 	{
 		origin: ["https://todo-app-nine-beige-94.vercel.app/"],
