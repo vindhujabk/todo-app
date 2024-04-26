@@ -23,31 +23,32 @@ function Task({ task, id }) {
     auth: process.env.REACT_APP_GITHUB_TOKEN
   });
 
-  async function createGist(projectTitle, projectDescription,todosList) {
+  async function createGist(projectTitle, projectDescription, todosList) {
     try {
-      
+      const todosText = todosList.map(todo => `- ${todo.text}`).join('\n');
+  
       const response = await octokit.request('POST /gists', {
-        description: projectTitle, 
-        public: false, 
+        description: projectTitle,
+        public: false,
         files: {
           [`${projectTitle}.md`]: {
-              content: `# ${projectTitle}\n\n${projectDescription}\n\n ${todosList}` // Content of the Gist file
+            content: `# ${projectTitle}\n\n${projectDescription}\n\n## Todos\n${todosText}`
           }
         }
       });
-   
+  
       console.log('Gist created:', response.data.html_url);
-
+  
       return {
         url: response.data.html_url,
-            content: `# ${projectTitle}\n\n${projectDescription}\n\n ${todosList}`
-      }
+        content: `# ${projectTitle}\n\n${projectDescription}\n\n## Todos\n${todosText}`
+      };
     } catch (error) {
-     
       console.error('Error creating Gist:', error);
-      throw error
+      throw error;
     }
   }
+  
 
   function saveGistLocally(projectTitle, content) {
     const blob = new Blob([content], { type: 'text/markdown' });

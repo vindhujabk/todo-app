@@ -46,7 +46,7 @@ useEffect(() => {
     try {
       const res = await axios.post(
         `/project/updateProject/${id}`,
-        { title, description, todos },
+        { title, description, todos: todos.map(todo => ({ text: todo })) },
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
