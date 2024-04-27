@@ -29,7 +29,7 @@ REACT_APP_GITHUB_TOKEN=github personal access token
 Go to ```backend``` and ```frontend``` directory and start the server
 ```
 cd backend
-nodemon server
+nodemon index
 ```
 ```
 cd frontend
