@@ -19,8 +19,12 @@ Create ```.env``` file inside ```backend``` directory and copy the following cod
 MONGO_URI=Your mongodb URI
 PORT=8000
 JWT_SECRET=a random secret key eg. arandomsecretkey
+```
+Create ```.env``` file inside ```frontend``` directory and copy the following code
+```
 REACT_APP_GITHUB_TOKEN=github personal access token
 ```
+
 # Run the App
 Go to ```backend``` and ```frontend``` directory and start the server
 ```
